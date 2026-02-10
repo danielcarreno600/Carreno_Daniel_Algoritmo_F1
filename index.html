@@ -2,13 +2,22 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>F1 Mash | Preferencias de Escuderías</title>
+  <title>F1 Mash</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h1>🏁 F1 Mash</h1>
-  <p class="subtitle">¿Qué escudería prefieres?</p>
+<h1>🏁 F1 Mash</h1>
+
+<div id="fanSelector">
+  <p>¿Qué tan fan de la F1 eres?</p>
+  <button onclick="iniciar('bajo')">🏎️ Poco fan</button>
+  <button onclick="iniciar('medio')">🔥 Fan medio</button>
+  <button onclick="iniciar('alto')">🏆 Muy fan</button>
+</div>
+
+<div id="algoritmo" style="display:none;">
+  <p>¿Qué prefieres?</p>
 
   <div id="comparison">
     <button id="optionA"></button>
@@ -16,9 +25,10 @@
     <button id="optionB"></button>
   </div>
 
-  <h2>Ranking de Escuderías</h2>
+  <h2>Ranking</h2>
   <ul id="ranking"></ul>
+</div>
 
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

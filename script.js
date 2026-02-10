@@ -1,63 +1,71 @@
-// Algoritmo base CourseMash adaptado a F1 (Escuderías)
+let items = [];
+let opcionA, opcionB;
 
-let escuderias = [
-  { nombre: "Ferrari", score: 0 },
-  { nombre: "Mercedes", score: 0 },
-  { nombre: "Red Bull", score: 0 },
-  { nombre: "McLaren", score: 0 },
-  { nombre: "Aston Martin", score: 0 },
-  { nombre: "Alpine", score: 0 },
-  { nombre: "Williams", score: 0 },
-  { nombre: "Haas", score: 0 },
-  { nombre: "Sauber", score: 0 },
-  { nombre: "RB", score: 0 }
+// Listas según nivel de fan
+const escuderias = [
+  "Ferrari", "Mercedes", "Red Bull", "McLaren",
+  "Aston Martin", "Alpine", "Williams"
 ];
 
-let opcionA;
-let opcionB;
+const pilotos = [
+  "Hamilton", "Verstappen", "Alonso",
+  "Leclerc", "Norris", "Sainz"
+];
 
-function seleccionarEscuderias() {
-  let indices = [...escuderias.keys()]
+function iniciar(nivel) {
+  document.getElementById("fanSelector").style.display = "none";
+  document.getElementById("algoritmo").style.display = "block";
+
+  let listaBase = [...escuderias];
+
+  if (nivel === "medio") {
+    listaBase = listaBase.concat(pilotos.slice(0, 3));
+  }
+
+  if (nivel === "alto") {
+    listaBase = listaBase.concat(pilotos);
+  }
+
+  items = listaBase.map(nombre => ({
+    nombre,
+    score: 0
+  }));
+
+  seleccionar();
+  actualizarRanking();
+}
+
+function seleccionar() {
+  let indices = [...items.keys()]
     .sort(() => Math.random() - 0.5)
     .slice(0, 2);
 
-  opcionA = escuderias[indices[0]];
-  opcionB = escuderias[indices[1]];
+  opcionA = items[indices[0]];
+  opcionB = items[indices[1]];
 
   document.getElementById("optionA").textContent = opcionA.nombre;
   document.getElementById("optionB").textContent = opcionB.nombre;
 }
 
 function votar(ganadora, perdedora) {
-  ganadora.score += 1;
-  perdedora.score -= 1;
+  ganadora.score++;
+  perdedora.score--;
 
+  seleccionar();
   actualizarRanking();
-  seleccionarEscuderias();
 }
 
 function actualizarRanking() {
-  let rankingOrdenado = [...escuderias].sort(
-    (a, b) => b.score - a.score
-  );
+  let ranking = [...items].sort((a, b) => b.score - a.score);
+  let ul = document.getElementById("ranking");
+  ul.innerHTML = "";
 
-  let lista = document.getElementById("ranking");
-  lista.innerHTML = "";
-
-  rankingOrdenado.forEach(escuderia => {
+  ranking.forEach(item => {
     let li = document.createElement("li");
-    li.textContent = `${escuderia.nombre}: ${escuderia.score}`;
-    lista.appendChild(li);
+    li.textContent = `${item.nombre}: ${item.score}`;
+    ul.appendChild(li);
   });
 }
 
-document.getElementById("optionA").addEventListener("click", () => {
-  votar(opcionA, opcionB);
-});
-
-document.getElementById("optionB").addEventListener("click", () => {
-  votar(opcionB, opcionA);
-});
-
-seleccionarEscuderias();
-actualizarRanking();
+document.getElementById("optionA").onclick = () => votar(opcionA, opcionB);
+document.getElementById("optionB").onclick = () => votar(opcionB, opcionA);
